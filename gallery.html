@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View the Grand Vista Hotel gallery and stunning spaces.">
+    <title>Gallery | Grand Vista Hotel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <span class="crown">◆</span> GRAND <span>VISTA</span>
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="authNavItem"></li>
+                <li><a href="contact.html" class="nav-cta">Book Now</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="section-tag">Visual Journey</div>
+            <h1 class="page-hero-title">Explore Our Signature Spaces</h1>
+            <p class="page-hero-subtitle">A glimpse into the elegant interiors, serene moments, and memorable experiences at Grand Vista.</p>
+        </div>
+    </section>
+
+    <main class="content-shell">
+        <div class="container">
+            <div class="center">
+                <div class="section-tag">Gallery</div>
+                <h2 class="section-title">A View Of Luxury</h2>
+            </div>
+            <div class="gallery-grid" id="galleryGrid" style="margin-top: 36px;"></div>
+        </div>
+    </main>
+
+    <section class="testimonials" style="margin-top: 20px;">
+        <div class="container">
+            <div class="center">
+                <div class="section-tag">Moments</div>
+                <h2 class="section-title">Guest Favorites</h2>
+            </div>
+            <div class="slider" id="slider" style="margin-top: 30px;">
+                <div class="slide active">
+                    <div class="stars">★★★★★</div>
+                    <blockquote>"An absolutely breathtaking experience. The service was impeccable and the views from our suite were unforgettable."</blockquote>
+                    <div class="author">Sarah Mitchell <small>Business Traveler</small></div>
+                </div>
+                <div class="slide">
+                    <div class="stars">★★★★★</div>
+                    <blockquote>"From the moment we arrived, the staff made us feel like royalty. The infinity pool at sunset is pure magic."</blockquote>
+                    <div class="author">James &amp; Amelia Chen <small>Honeymooners</small></div>
+                </div>
+                <div class="slide">
+                    <div class="stars">★★★★★</div>
+                    <blockquote>"Perfect venue for our corporate conference. Impeccable amenities, delicious food, and every detail was flawless."</blockquote>
+                    <div class="author">David Okafor <small>Corporate Client</small></div>
+                </div>
+            </div>
+            <div class="dots" id="dots"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo" style="margin-bottom:18px;">
+                        <span class="crown">◆</span> GRAND <span>VISTA</span>
+                    </a>
+                    <p>Luxury accommodations in the heart of the city. Where every stay becomes a cherished memory.</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="gallery.html">Photo Tours</a></li>
+                        <li><a href="services.html">Dining</a></li>
+                        <li><a href="services.html">Spa</a></li>
+                        <li><a href="contact.html">Book a Room</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>📍 RATNAGIRI KHANU</li>
+                        <li>📞 9561494863</li>
+                        <li>✉️ reservations@grandvista.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© <span id="year"></span> Grand Vista Hotel. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

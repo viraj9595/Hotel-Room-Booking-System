@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Grand Vista Hotel - Luxury accommodations, fine dining and unforgettable experiences.">
+    <title>Grand Vista Hotel Luxury Stays</title>
+    <script>
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const shouldSkip = params.get('guest') === '1' || sessionStorage.getItem('gv_continue_guest') === '1';
+            const hasSession = !!localStorage.getItem('gv_session');
+            const isIndex = window.location.pathname.toLowerCase().endsWith('/index.html') || window.location.pathname === '/' || window.location.pathname === '';
+
+            if (hasSession && !shouldSkip) return;
+            if (!hasSession && !shouldSkip && isIndex) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <style>
+        /* ============ RESET & BASE ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #c9a962; --gold-dark: #a8884a; --dark: #1c1c1c;
+            --dark-2: #2a2a2a; --light: #f8f6f1; --text: #4a4a4a;
+            --white: #ffffff; --shadow: 0 10px 35px rgba(0,0,0,0.12);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text); background: var(--white);
+            line-height: 1.7; overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        section { padding: 90px 0; }
+        .section-tag {
+            text-transform: uppercase; letter-spacing: 4px;
+            color: var(--gold-dark); font-size: 0.85rem;
+            font-weight: 700; margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 2.5rem; color: var(--dark);
+            font-weight: 700; margin-bottom: 16px; line-height: 1.2;
+        }
+        .section-desc { max-width: 650px; margin: 0 auto 50px; color: var(--text); }
+        .center { text-align: center; }
+
+        /* ============ NAVBAR ============ */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: rgba(28,28,28,0.92); backdrop-filter: blur(6px);
+            transition: background 0.4s ease;
+        }
+        .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+        .logo {
+            display: flex; align-items: center; gap: 10px;
+            color: var(--white); font-size: 1.4rem;
+            font-weight: 700; letter-spacing: 1px;
+        }
+        .logo .crown { font-size: 1.6rem; }
+        .logo span { color: var(--gold); }
+        .nav-links { display: flex; list-style: none; gap: 34px; }
+        .nav-links a {
+            color: #e8e8e8; font-size: 0.95rem;
+            font-weight: 500; position: relative; transition: color 0.3s;
+        }
+        .nav-links a::after {
+            content: ""; position: absolute; left: 0; bottom: -6px;
+            width: 0; height: 2px; background: var(--gold); transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cta {
+            background: var(--gold); color: var(--dark);
+            padding: 10px 22px; border-radius: 30px;
+            font-weight: 600; transition: background 0.3s;
+        }
+        .nav-cta:hover { background: var(--gold-dark); color: var(--white); }
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; background: none; border: none; z-index: 1100;
+        }
+        .hamburger span {
+            width: 26px; height: 3px; background: var(--white);
+            border-radius: 3px; transition: 0.3s;
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* ============ HERO ============ */
+        .hero {
+            height: 100vh; min-height: 620px;
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: var(--white); position: relative;
+        }
+        .hero-content {
+            max-width: 900px;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            position: relative;
+            display: inline-block;
+            font-size: clamp(2.1rem, 4vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            color: #fff;
+            text-shadow: 0 4px 18px rgba(0,0,0,0.55), 0 0 28px rgba(201,169,98,0.4);
+            background: linear-gradient(135deg, #fff7d6 0%, #d9b76b 20%, #fffef7 45%, #f3d89a 70%, #f5f5f5 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero h1::after {
+            content: "";
+            display: block;
+            width: 180px;
+            height: 3px;
+            margin: 14px auto 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(201,169,98,0), rgba(201,169,98,1), rgba(201,169,98,0));
+            box-shadow: 0 0 18px rgba(201,169,98,0.7);
+        }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; color: #f0ede6; }
+        .hero-btn {
+            display: inline-block; background: var(--gold); color: var(--dark);
+            padding: 14px 36px; border-radius: 40px; font-weight: 700;
+            font-size: 1rem; transition: background 0.3s, transform 0.3s;
+        }
+        .hero-btn:hover { background: var(--gold-dark); color: var(--white); transform: translateY(-3px); }
+        .scroll-down {
+            position: absolute; bottom: 28px; left: 50%;
+            transform: translateX(-50%); color: var(--white);
+            font-size: 1.6rem; animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 10px); }
+        }
+
+        /* ============ BOOKING FORM ============ */
+        .booking-wrapper {
+            background: var(--white); box-shadow: var(--shadow);
+            border-radius: 12px; margin-top: -70px;
+            position: relative; z-index: 10; padding: 36px;
+        }
+        .booking-form {
+            display: grid; grid-template-columns: repeat(4, 1fr) auto;
+            gap: 20px; align-items: end;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--gold-dark);
+        }
+        .form-group input, .form-group select {
+            padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 0.95rem; background: var(--light);
+            outline: none; transition: border 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+        .book-submit {
+            background: var(--gold); color: var(--dark); border: none;
+            padding: 14px 30px; border-radius: 8px; font-weight: 700;
+            cursor: pointer; transition: background 0.3s; white-space: nowrap;
+        }
+        .book-submit:hover { background: var(--gold-dark); color: var(--white); }
+        #booking-success {
+            display: none; margin-top: 20px; background: #e8f7ee;
+            border-left: 4px solid #27ae60; color: #1f7a45;
+            padding: 12px 16px; border-radius: 6px; font-weight: 500;
+        }
+
+        /* ============ ROOMS ============ */
+        .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+        .room-card {
+            background: var(--white); border-radius: 12px; overflow: hidden;
+            box-shadow: var(--shadow); transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .room-card:hover { transform: translateY(-8px); box-shadow: 0 18px 45px rgba(0,0,0,0.18); }
+        .room-img { height: 235px; background-size: cover; background-position: center; position: relative; }
+        .room-price {
+            position: absolute; top: 14px; right: 14px;
+            background: rgba(28,28,28,0.85); color: var(--gold);
+            padding: 8px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem;
+        }
+        .room-body { padding: 26px; }
+        .room-body h3 { color: var(--dark); font-size: 1.3rem; margin-bottom: 10px; }
+        .room-body p { font-size: 0.95rem; margin-bottom: 16px; }
+        .room-features {
+            display: flex; flex-wrap: wrap; gap: 14px; list-style: none;
+            font-size: 0.85rem; color: var(--text); margin-bottom: 20px;
+        }
+        .room-features li { display: flex; align-items: center; gap: 6px; }
+        .room-link { color: var(--gold-dark); font-weight: 700; font-size: 0.95rem; }
+        .room-link:hover { color: var(--dark); }
+
+        /* ============ AMENITIES ============ */
+        .amenities { background: var(--dark); color: var(--white); }
+        .amenities .section-title { color: var(--white); }
+        .amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px; }
+        .amenity {
+            text-align: center; padding: 30px 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px; transition: background 0.3s, transform 0.3s;
+        }
+        .amenity:hover { background: rgba(255,255,255,0.06); transform: translateY(-6px); }
+        .amenity .icon { font-size: 2.6rem; margin-bottom: 16px; }
+        .amenity h4 { font-size: 1.1rem; margin-bottom: 8px; }
+        .amenity p { font-size: 0.9rem; color: #c5c5c5; }
+
+        /* ============ GALLERY ============ */
+        .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .gallery-item {
+            height: 280px; background-size: cover; background-position: center;
+            border-radius: 10px; position: relative; overflow: hidden; transition: transform 0.4s;
+        }
+        .gallery-item::after {
+            content: ""; position: absolute; inset: 0;
+            background: rgba(0,0,0,0.35); opacity: 0; transition: opacity 0.4s;
+        }
+        .gallery-item:hover { transform: scale(1.03); }
+        .gallery-item:hover::after { opacity: 1; }
+
+        /* ============ TESTIMONIALS ============ */
+        .testimonials { background: var(--light); }
+        .slider { max-width: 750px; margin: 0 auto; position: relative; text-align: center; }
+        .slide { display: none; animation: fade 0.6s ease; }
+        .slide.active { display: block; }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide .stars { color: var(--gold); font-size: 1.4rem; margin-bottom: 18px; }
+        .slide blockquote {
+            font-size: 1.25rem; font-style: italic; color: var(--dark);
+            margin-bottom: 24px; line-height: 1.6;
+        }
+        .slide .author { color: var(--gold-dark); font-weight: 700; font-size: 1rem; }
+        .slide .author small { display: block; color: var(--text); font-weight: 400; margin-top: 4px; }
+        .dots { margin-top: 30px; display: flex; justify-content: center; gap: 10px; }
+        .dots button {
+            width: 11px; height: 11px; border-radius: 50%; border: none;
+            background: #d4cfc4; cursor: pointer; transition: background 0.3s;
+        }
+        .dots button.active { background: var(--gold-dark); transform: scale(1.2); }
+
+        /* ============ CONTACT ============ */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .contact-info h3 { color: var(--dark); font-size: 1.6rem; margin-bottom: 20px; }
+        .contact-info p { margin-bottom: 24px; font-size: 1rem; }
+        .info-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+        .info-row .icon { font-size: 1.4rem; }
+        .contact-form {
+            background: var(--white); box-shadow: var(--shadow);
+            border-radius: 12px; padding: 36px;
+        }
+        .contact-form h3 { color: var(--dark); margin-bottom: 22px; }
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 13px 15px; border: 1px solid #ddd;
+            border-radius: 8px; font-family: inherit; font-size: 0.95rem;
+            margin-bottom: 18px; background: var(--light); outline: none; transition: border 0.3s;
+        }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--gold); }
+        .contact-form textarea { resize: vertical; min-height: 110px; }
+        .submit-btn {
+            background: var(--gold); color: var(--dark); border: none;
+            padding: 14px 32px; border-radius: 8px; font-weight: 700;
+            cursor: pointer; transition: background 0.3s; width: 100%;
+        }
+        .submit-btn:hover { background: var(--gold-dark); color: var(--white); }
+
+        /* ============ FOOTER ============ */
+        footer { background: var(--dark-2); color: #c5c5c5; padding: 60px 0 0; }
+        .footer-grid {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px; padding-bottom: 40px;
+        }
+        .footer-grid h4 { color: var(--white); margin-bottom: 18px; font-size: 1.1rem; }
+        .footer-grid p { font-size: 0.9rem; margin-bottom: 18px; }
+        .footer-grid ul { list-style: none; }
+        .footer-grid ul li { margin-bottom: 12px; }
+        .footer-grid ul a { font-size: 0.9rem; transition: color 0.3s; }
+        .footer-grid ul a:hover { color: var(--gold); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; text-align: center; font-size: 0.85rem; }
+        .footer-bottom span { color: var(--gold); }
+
+        /* ============ AUTH & PAYMENT MODALS ============ */
+        .modal-backdrop {
+            position: fixed; inset: 0; z-index: 2000;
+            background: rgba(0,0,0,0.62); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+            padding: 20px; overflow-y: auto;
+        }
+        .modal-backdrop.show { display: flex; }
+        .modal-box {
+            background: var(--white); border-radius: 16px;
+            width: 100%; max-width: 440px; margin: auto;
+            padding: 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            position: relative; animation: modalIn 0.35s ease;
+        }
+        .payment-box { max-width: 580px; }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(25px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-close {
+            position: absolute; top: 14px; right: 16px;
+            background: none; border: none; font-size: 1.35rem;
+            color: #999; cursor: pointer; line-height: 1; transition: color 0.3s;
+        }
+        .modal-close:hover { color: var(--dark); }
+
+        .auth-tabs {
+            display: flex; gap: 8px; background: var(--light);
+            padding: 6px; border-radius: 40px; margin-bottom: 24px;
+        }
+        .auth-tab {
+            flex: 1; padding: 10px; border: none; border-radius: 30px;
+            background: transparent; font-weight: 700; font-size: 0.95rem;
+            color: var(--text); cursor: pointer; transition: all 0.3s;
+        }
+        .auth-tab.active { background: var(--gold); color: var(--dark); }
+        .auth-form { display: none; }
+        .auth-form.show { display: block; animation: modalIn 0.3s ease; }
+        .auth-form h3 { color: var(--dark); margin-bottom: 4px; }
+        .auth-form .sub { font-size: 0.88rem; margin-bottom: 18px; }
+        .auth-form .form-group { margin-bottom: 14px; gap: 5px; }
+        .auth-form .form-group input {
+            width: 100%; padding: 12px 14px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 0.95rem; background: var(--light);
+            outline: none; transition: border 0.3s;
+        }
+        .auth-form .form-group input:focus { border-color: var(--gold); }
+        .auth-submit {
+            width: 100%; padding: 13px; margin-top: 4px;
+            background: var(--gold); color: var(--dark); border: none;
+            border-radius: 8px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: background 0.3s;
+        }
+        .auth-submit:hover { background: var(--gold-dark); color: var(--white); }
+        .auth-switch { text-align: center; margin-top: 16px; font-size: 0.9rem; color: var(--text); }
+        .auth-switch a { color: var(--gold-dark); font-weight: 700; cursor: pointer; }
+        .auth-msg {
+            display: none; margin-top: 14px; padding: 11px 14px;
+            border-radius: 8px; font-size: 0.9rem; font-weight: 500;
+        }
+        .auth-msg.show { display: block; }
+        .auth-msg.error { background: #fdecea; color: #b03a2e; border-left: 4px solid #e74c3c; }
+        .auth-msg.success { background: #e8f7ee; color: #1f7a45; border-left: 4px solid #27ae60; }
+        .auth-note { font-size: 0.78rem; color: #999; text-align: center; margin-top: 14px; }
+
+/* Navbar account area */
+        .nav-auth-link { color: var(--gold) !important; font-weight: 700; }
+        .nav-user-wrap { display: flex; align-items: center; gap: 12px; }
+        .nav-user { color: var(--gold); font-weight: 600; font-size: 0.92rem; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+        .nav-logout { color: #e8e8e8; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.35); padding: 6px 14px; border-radius: 30px; transition: 0.3s; white-space: nowrap; }
+        .nav-logout:hover { color: var(--gold); border-color: var(--gold); }
+
+        /* Payment modal */
+        .pay-summary {
+            background: var(--light); border-radius: 12px;
+            padding: 16px 18px; margin-bottom: 22px; font-size: 0.93rem;
+        }
+        .pay-summary h4 { color: var(--dark); font-size: 1rem; margin-bottom: 8px; }
+        .pay-summary .row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; }
+        .pay-summary .row.total {
+            border-top: 1px dashed #c9c4b8; margin-top: 8px;
+            padding-top: 12px; font-weight: 800; color: var(--dark); font-size: 1.1rem;
+        }
+        .pay-section-title {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--gold-dark); margin-bottom: 12px;
+        }
+        .pay-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .pay-option input { position: absolute; opacity: 0; pointer-events: none; }
+        .pay-label {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            border: 2px solid #e3e0d8; border-radius: 12px; padding: 14px 6px 12px;
+            cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--text);
+            transition: all 0.3s; text-align: center; user-select: none;
+        }
+        .pay-label .picon { font-size: 1.6rem; line-height: 1; }
+        .pay-option input:checked + .pay-label {
+            border-color: var(--gold); background: #fdf9ef; color: var(--dark);
+            box-shadow: 0 4px 14px rgba(201,169,98,0.25);
+        }
+        .pay-fields { display: none; }
+        .pay-fields.show { display: block; animation: modalIn 0.3s ease; margin-bottom: 16px; }
+        .pay-fields .form-group { margin-bottom: 12px; }
+        .pay-fields .form-group input {
+            width: 100%; padding: 12px 14px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 0.95rem; background: var(--light);
+            outline: none; transition: border 0.3s;
+        }
+        .pay-fields .form-group input:focus { border-color: var(--gold); }
+        .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .pay-btn {
+            width: 100%; padding: 14px; background: var(--gold); color: var(--dark);
+            border: none; border-radius: 8px; font-weight: 700; font-size: 1.05rem;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .pay-btn:hover { background: var(--gold-dark); color: var(--white); }
+        .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .pay-msg {
+            display: none; margin-top: 14px; padding: 12px 14px;
+            border-radius: 8px; font-size: 0.92rem; font-weight: 500; text-align: center;
+        }
+        .pay-msg.show { display: block; }
+        .pay-msg.error { background: #fdecea; color: #b03a2e; border-left: 4px solid #e74c3c; }
+        .pay-msg.success { background: #e8f7ee; color: #1f7a45; border-left: 4px solid #27ae60; }
+        .secure-note { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: #999; margin-top: 12px; justify-content: center; }
+        /* ============ MOBILE MENU OVERLAY ============ */
+        .nav-overlay {
+            position: fixed; inset: 0; z-index: 1050;
+            background: rgba(0, 0, 0, 0.55);
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .nav-overlay.show { opacity: 1; visibility: visible; }
+
+        /* ============ RESPONSIVE ============ */
+        /* Tablets & small laptops */
+        @media (max-width: 940px) {
+            .booking-form { grid-template-columns: repeat(2, 1fr); }
+            .rooms-grid { grid-template-columns: repeat(2, 1fr); }
+            .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Tablets (portrait) & large phones: hamburger menu */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; height: 100vh;
+                width: 72%; max-width: 320px; background: var(--dark-2);
+                flex-direction: column; justify-content: center; align-items: center;
+                gap: 32px; transition: right 0.4s ease; z-index: 1100;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.35);
+            }
+            .nav-links.open { right: 0; }
+            .nav-links a { font-size: 1.1rem; }
+            .nav-links .nav-cta { padding: 13px 34px; font-size: 1rem; }
+            body.menu-open { overflow: hidden; }
+            .hero h1 { font-size: 2.7rem; }
+        }
+
+        /* Phones */
+        @media (max-width: 620px) {
+            .container { width: 92%; }
+            section { padding: 64px 0; }
+            .section-title { font-size: 2rem; }
+            .section-desc { margin-bottom: 34px; }
+
+            .nav { padding: 12px 0; }
+            .logo { font-size: 1.2rem; }
+
+            .hero {
+                height: auto; min-height: 100vh; min-height: 100svh;
+                padding: 130px 0 90px;
+            }
+            .hero h1 { font-size: 2.2rem; }
+            .hero h1 br { display: none; }
+            .hero p { font-size: 1.05rem; }
+
+            .booking-wrapper { padding: 24px; margin-top: -46px; }
+            .booking-form { grid-template-columns: 1fr; gap: 16px; }
+            .book-submit { width: 100%; padding: 16px; font-size: 1rem; }
+
+            .rooms-grid, .amenities-grid { grid-template-columns: 1fr; gap: 22px; }
+            .room-body { padding: 20px; }
+
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .gallery-item { height: 190px; }
+
+            .slide blockquote { font-size: 1.05rem; }
+            .dots { margin-top: 22px; }
+
+            .contact-form { padding: 24px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 34px; }
+        }
+
+        /* Small phones (< 400px) */
+        @media (max-width: 400px) {
+            .logo { font-size: 1.05rem; gap: 6px; }
+            .hero h1 { font-size: 1.85rem; }
+            .hero p { font-size: 1rem; }
+            .section-title { font-size: 1.7rem; }
+            .booking-wrapper { padding: 20px; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-item { height: 220px; }
+            .nav-links { width: 82%; }
+        }
+
+        /* Auth & payment modals on small screens */
+        @media (max-width: 640px) {
+            .modal-box { padding: 24px; }
+            .pay-methods { grid-template-columns: 1fr; }
+            .card-row { grid-template-columns: 1fr; }
+            .nav-user-wrap { gap: 8px; }
+        }
+    /* ============ PAY NOW SECTION (RAZORPAY) - ADDED ============ */
+        .paynow-wrapper { background: var(--light); }
+        .paynow-card {
+            background: var(--white); border-radius: 16px; box-shadow: var(--shadow);
+            padding: 44px; display: grid; grid-template-columns: 1.55fr 1fr; gap: 44px;
+            align-items: stretch; text-align: left;
+        }
+        .paynow-main { display: flex; flex-direction: column; gap: 18px; }
+        .paynow-amount {
+            display: flex; align-items: center; gap: 12px;
+            border: 2px solid #e3e0d8; border-radius: 12px; padding: 6px 16px 6px 18px;
+            background: var(--light); transition: border 0.3s, box-shadow 0.3s;
+        }
+        .paynow-amount:focus-within { border-color: var(--gold); box-shadow: 0 4px 14px rgba(201,169,98,0.18); }
+        .paynow-amount .cur { font-size: 1.35rem; font-weight: 800; color: var(--gold-dark); }
+        .paynow-amount input {
+            flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+            font-size: 1.35rem; font-weight: 700; color: var(--dark);
+            padding: 10px 0; font-family: inherit;
+        }
+        .paynow-amount input::placeholder { color: #b9b3a6; font-weight: 500; font-size: 1.05rem; }
+        .paynow-hint { font-size: 0.9rem; color: var(--text); margin-top: -6px; }
+        .paynow-hint b { color: var(--gold-dark); }
+        .paynow-trust { background: var(--light); border: 1px solid #eae6dc; border-radius: 14px; padding: 24px; }
+        .paynow-trust h4 { color: var(--dark); font-size: 1.02rem; margin-bottom: 14px; }
+        .paynow-trust ul { list-style: none; }
+        .paynow-trust li { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 0.9rem; color: var(--text); }
+        .paynow-trust li .i { flex-shrink: 0; }
+        .paynow-powered {
+            display: flex; align-items: center; gap: 8px; margin-top: 16px;
+            padding-top: 16px; border-top: 1px dashed #d8d2c4; font-size: 0.8rem; color: #999;
+        }
+        .paynow-powered b {
+            color: #0C1F2D; background: #fff; border: 1px solid #e4e4e4;
+            padding: 3px 10px; border-radius: 20px; font-size: 0.78rem;
+        }
+        @media (max-width: 900px) {
+            .paynow-card { grid-template-columns: 1fr; padding: 28px; gap: 30px; }
+        }
+        @media (max-width: 640px) {
+            .paynow-card { padding: 24px 20px; }
+            .paynow-amount input { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header>
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <span class="crown">◆</span> GRAND <span>VISTA</span>
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="contact.html">Pay Now</a></li>
+                <li id="authNavItem"></li>
+                <li><a href="contact.html" class="nav-cta">Book Now</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Grand Vista Hotel Luxury Stays</h1>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo" style="margin-bottom:18px;">
+                        <span class="crown">◆</span> GRAND <span>VISTA</span>
+                    </a>
+                    <p>Luxury accommodations in the heart of the city. Where every stay becomes a cherished memory.</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="contact.html">Book a Room</a></li>
+                        <li><a href="gallery.html">Reviews</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="services.html">Spa &amp; Pool</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>📍 RATNAGIRI KHANU</li>
+                        <li>📞 9561494863</li>
+                        <li>✉️ reservations@grandvista.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © <span id="year"></span> Grand Vista Hotel. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============ AUTH MODAL (LOGIN / REGISTER) ============ -->
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-box">
+            <button class="modal-close" id="authClose" aria-label="Close">✕</button>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+
+            <!-- Login -->
+            <form class="auth-form show" id="loginForm">
+                <h3>Welcome Back</h3>
+                <p class="sub">Log in to your Grand Vista account.</p>
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="auth-submit">Log In</button>
+                <div class="auth-msg error" id="loginMsg"></div>
+                <p class="auth-switch">New here? <a id="gotoRegister">Create an account</a></p>
+                <p class="auth-note">Demo account: test@grandvista.com / password123</p>
+            </form>
+
+            <!-- Register -->
+            <form class="auth-form" id="registerForm">
+                <h3>Create Account</h3>
+                <p class="sub">Join Grand Vista for faster bookings.</p>
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" placeholder="John Doe" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" placeholder="you@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password (min 6 characters)</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="regConfirm">Confirm Password</label>
+                    <input type="password" id="regConfirm" placeholder="••••••••" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="auth-submit">Create Account</button>
+                <div class="auth-msg error" id="regMsg"></div>
+                <p class="auth-switch">Already have an account? <a id="gotoLogin">Log in</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============ PAYMENT MODAL ============ -->
+    <div class="modal-backdrop" id="paymentModal">
+        <div class="modal-box payment-box">
+            <button class="modal-close" id="payClose" aria-label="Close">✕</button>
+            <h3 style="color:var(--dark); margin-bottom:4px;">Complete Your Booking</h3>
+            <p class="sub" style="font-size:0.88rem; margin-bottom:18px;">Confirm your stay and pay securely to reserve your room.</p>
+
+            <div class="pay-summary">
+                <h4>Booking Summary</h4>
+                <div class="row"><span>Room</span><b id="payRoom">—</b></div>
+                <div class="row"><span>Dates</span><span id="payDates">—</span></div>
+                <div class="row"><span>Nights</span><span id="payNights">—</span></div>
+                <div class="row"><span>Guests</span><span id="payGuests">—</span></div>
+                <div class="row"><span>Rate / Night</span><span id="payPerNight">—</span></div>
+                <div class="row total"><span>Total</span><span id="payTotal">—</span></div>
+            </div>
+
+            <div class="pay-section-title">Select Payment Method</div>
+            <div class="pay-methods">
+                <label class="pay-option">
+                    <input type="radio" name="payMethod" value="card" checked>
+                    <span class="pay-label"><span class="picon">💳</span> Credit / Debit Card</span>
+                </label>
+                <label class="pay-option">
+                    <input type="radio" name="payMethod" value="upi">
+                    <span class="pay-label"><span class="picon">📲</span> UPI</span>
+                </label>
+                <label class="pay-option">
+                    <input type="radio" name="payMethod" value="paypal">
+                    <span class="pay-label"><span class="picon">🅿️</span> PayPal</span>
+                </label>
+            </div>
+
+            <div class="pay-fields show" id="payCardFields">
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" id="cardName" placeholder="John Doe" autocomplete="cc-name">
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" autocomplete="cc-number">
+                </div>
+                <div class="card-row">
+                    <div class="form-group">
+                        <label for="cardExpiry">Expiry</label>
+                        <input type="text" id="cardExpiry" maxlength="5" placeholder="MM/YY" autocomplete="cc-exp">
+                    </div>
+                    <div class="form-group">
+                        <label for="cardCvv">CVV</label>
+                        <input type="password" id="cardCvv" inputmode="numeric" maxlength="4" placeholder="•••" autocomplete="cc-csc">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pay-fields" id="payUpiFields">
+                <div class="form-group">
+                    <label for="upiId">UPI ID</label>
+                    <input type="text" id="upiId" placeholder="yourname@upi">
+                </div>
+            </div>
+
+            <div class="pay-fields" id="payPaypalFields">
+                <div class="form-group">
+                    <label for="paypalEmail">PayPal Email</label>
+                    <input type="email" id="paypalEmail" placeholder="you@example.com">
+                </div>
+            </div>
+
+            <button type="button" class="pay-btn" id="payNowBtn">Pay Now</button>
+            <div class="pay-msg" id="payMsg"></div>
+            <p class="secure-note">🔒 Payments are 256-bit SSL encrypted</p>
+        </div>
+    </div>
+
+    <!-- Razorpay Checkout SDK (real payment gateway) -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        // ========== MOBILE MENU ==========
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        const overlay = document.getElementById('navOverlay');
+
+        function openMenu() {
+            hamburger.classList.add('active');
+            navLinks.classList.add('open');
+            overlay.classList.add('show');
+            document.body.classList.add('menu-open');
+            hamburger.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('open');
+            overlay.classList.remove('show');
+            document.body.classList.remove('menu-open');
+            hamburger.setAttribute('aria-expanded', 'false');
+        }
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.contains('open') ? closeMenu() : openMenu();
+        });
+
+        // Close menu when a link is clicked or the overlay is tapped
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+        overlay.addEventListener('click', closeMenu);
+
+        // Close menu with the Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMenu();
+        });
+
+        // ========== NAVBAR BACKGROUND ON SCROLL ==========
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            header.style.background = window.scrollY > 60
+                ? 'rgba(28, 28, 28, 0.98)'
+                : 'rgba(28, 28, 28, 0.92)';
+        });
+
+        // ========== BOOKING FORM ==========
+        const bookingForm = document.getElementById('bookingForm');
+        const bookingSuccess = document.getElementById('booking-success');
+        const successRoom = document.getElementById('success-room');
+        const successRef = document.getElementById('success-ref');
+        const successAmount = document.getElementById('success-amount');
+
+        const ROOM_PRICES = {
+            'Classic Room': 120,
+            'Deluxe Room': 180,
+            'Executive Suite': 320,
+            'Royal Suite': 450
+        };
+
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const guests = document.getElementById('guests').value;
+            const room = document.getElementById('room').value;
+
+            if (!checkin || !checkout) {
+                alert('Please select both check-in and check-out dates.');
+                return;
+            }
+            if (new Date(checkout) <= new Date(checkin)) {
+                alert('Check-out date must be after check-in date.');
+                return;
+            }
+
+            const nights = Math.round((new Date(checkout) - new Date(checkin)) / 86400000);
+            const rate = ROOM_PRICES[room] || 150;
+            const total = nights * rate;
+
+            document.getElementById('payRoom').textContent = room;
+            document.getElementById('payDates').textContent = checkin + ' \u21E2 ' + checkout;
+            document.getElementById('payNights').textContent = nights + (nights === 1 ? ' night' : ' nights');
+            document.getElementById('payGuests').textContent = guests + (guests === '1' ? ' guest' : ' guests');
+            document.getElementById('payPerNight').textContent = '$' + rate;
+            document.getElementById('payTotal').textContent = '$' + total;
+
+            currentBooking = { room: room, total: total };
+            resetPayment();
+            openPayment();
+        });
+
+        // ========== GALLERY (BUILT VIA JS) ==========
+        const galleryImages = [
+            'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=700&q=80',
+            'https://images.unsplash.com/photo-1551524164-687a55dd1126?auto=format&fit=crop&w=700&q=80'
+        ];
+
+        const galleryGrid = document.getElementById('galleryGrid');
+        galleryImages.forEach(url => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.style.backgroundImage = `url('${url}')`;
+            galleryGrid.appendChild(item);
+        });
+
+        // ========== TESTIMONIAL SLIDER ==========
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dots');
+        let currentSlide = 0;
+
+        // Create dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = dotsContainer.querySelectorAll('button');
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        // Auto-rotate every 5 seconds
+        setInterval(() => {
+            goToSlide((currentSlide + 1) % slides.length);
+        }, 5000);
+
+        // ========== CONTACT FORM ==========
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you! Your message has been sent. We will get back to you soon.');
+            contactForm.reset();
+        });
+
+        // ========== AUTH (LOGIN / REGISTER) - LOCAL STORAGE DEMO ==========
+        const USERS_KEY = 'gv_users';
+        const SESSION_KEY = 'gv_session';
+
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+            catch (e) { return []; }
+        }
+        function saveUsers(list) { localStorage.setItem(USERS_KEY, JSON.stringify(list)); }
+        function getSession() {
+            try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+            catch (e) { return null; }
+        }
+        function setSession(s) {
+            if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+            else localStorage.removeItem(SESSION_KEY);
+        }
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        // Seed a demo account once
+        if (!localStorage.getItem(USERS_KEY)) {
+            saveUsers([{ name: 'Guest User', email: 'test@grandvista.com', password: 'password123' }]);
+        }
+
+        const authModal = document.getElementById('authModal');
+        const paymentModal = document.getElementById('paymentModal');
+
+        function openModal(modal) {
+            document.body.classList.add('menu-open');
+            modal.classList.add('show');
+        }
+        function closeModal(modal) {
+            modal.classList.remove('show');
+            document.body.classList.remove('menu-open');
+        }
+
+        function openAuth() { openModal(authModal); }
+        function closeAuth() { closeModal(authModal); resetAuthMsgs(); loginForm.reset(); registerForm.reset(); }
+        function openPayment() {
+            resetPayment();
+            openModal(paymentModal);
+        }
+        function closePayment() { closeModal(paymentModal); }
+
+        // ---------- Navbar account state ----------
+        function renderAuthNav() {
+            const item = document.getElementById('authNavItem');
+            const session = getSession();
+            if (session) {
+                item.innerHTML =
+                    '<div class="nav-user-wrap">' +
+                    '   <span class="nav-user">\uD83D\uDC64 ' + escapeHtml(session.name) + '</span>' +
+                    '   <a href="#" class="nav-logout" id="logoutBtn">Logout</a>' +
+                    '</div>';
+                document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeMenu();
+                    setSession(null);
+                    renderAuthNav();
+                    alert('You have been logged out. See you soon!');
+                });
+            } else {
+                item.innerHTML = '<a href="#" class="nav-auth-link" id="accountBtn">Login / Sign Up</a>';
+                document.getElementById('accountBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeMenu();
+                    switchAuthTab('login');
+                    openAuth();
+                });
+            }
+        }
+        renderAuthNav();
+
+
+        // ---------- Auth tab switching ----------
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginMsg = document.getElementById('loginMsg');
+        const regMsg = document.getElementById('regMsg');
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+            loginForm.classList.toggle('show', tab === 'login');
+            registerForm.classList.toggle('show', tab === 'register');
+            resetAuthMsgs();
+        }
+
+        document.querySelectorAll('.auth-tab').forEach(btn => {
+            btn.addEventListener('click', () => switchAuthTab(btn.dataset.tab));
+        });
+        document.getElementById('gotoRegister').addEventListener('click', (e) => { e.preventDefault(); switchAuthTab('register'); });
+        document.getElementById('gotoLogin').addEventListener('click', (e) => { e.preventDefault(); switchAuthTab('login'); });
+        document.getElementById('authClose').addEventListener('click', closeAuth);
+        authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuth(); });
+
+        function showAuthMsg(el, text, type) {
+            el.textContent = text;
+            el.className = 'auth-msg show ' + (type || 'error');
+        }
+        function resetAuthMsgs() {
+            [loginMsg, regMsg].forEach(el => { el.textContent = ''; el.className = 'auth-msg'; });
+        }
+
+        // ---------- Register ----------
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+
+            if (name.length < 2) return showAuthMsg(regMsg, 'Please enter your full name.');
+            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showAuthMsg(regMsg, 'Please enter a valid email address.');
+            if (pass.length < 6) return showAuthMsg(regMsg, 'Password must be at least 6 characters.');
+            if (pass !== confirm) return showAuthMsg(regMsg, 'Passwords do not match.');
+
+            let users = getUsers();
+            if (users.some(u => u.email === email)) return showAuthMsg(regMsg, 'An account with this email already exists. Please log in.');
+
+            users.push({ name: name, email: email, password: pass });
+            saveUsers(users);
+            setSession({ name: name, email: email });
+
+            renderAuthNav();
+            closeAuth();
+            alert('Account created successfully! Welcome, ' + name + '! \uD83C\uDF89');
+            registerForm.reset();
+        });
+
+        // ---------- Login ----------
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPassword').value;
+
+            const user = getUsers().find(u => u.email === email && u.password === pass);
+            if (!user) return showAuthMsg(loginMsg, 'Invalid email or password. Please try again.');
+
+            setSession({ name: user.name, email: user.email });
+            renderAuthNav();
+            closeAuth();
+            alert('Welcome back, ' + user.name + '!');
+            loginForm.reset();
+        });
+
+
+// ---------- Payment modal ----------
+        let currentBooking = null;
+
+        function resetPayment() {
+            document.querySelectorAll('input[name="payMethod"]').forEach(r => r.checked = r.value === 'card');
+            selectPayMethod('card');
+            ['cardName', 'cardNumber', 'cardExpiry', 'cardCvv', 'upiId', 'paypalEmail'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            const msg = document.getElementById('payMsg');
+            msg.textContent = '';
+            msg.className = 'pay-msg';
+            document.getElementById('payNowBtn').disabled = false;
+        }
+
+        function selectPayMethod(method) {
+            document.getElementById('payCardFields').classList.toggle('show', method === 'card');
+            document.getElementById('payUpiFields').classList.toggle('show', method === 'upi');
+            document.getElementById('payPaypalFields').classList.toggle('show', method === 'paypal');
+        }
+
+        document.querySelectorAll('input[name="payMethod"]').forEach(r => {
+            r.addEventListener('change', () => selectPayMethod(r.value));
+        });
+
+        document.getElementById('payClose').addEventListener('click', closePayment);
+        paymentModal.addEventListener('click', (e) => { if (e.target === paymentModal) closePayment(); });
+
+        // Auto-format helpers
+        const cardNumberInput = document.getElementById('cardNumber');
+        const cardExpiryInput = document.getElementById('cardExpiry');
+        cardNumberInput.addEventListener('input', () => {
+            cardNumberInput.value = cardNumberInput.value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+        });
+        cardExpiryInput.addEventListener('input', () => {
+            let v = cardExpiryInput.value.replace(/\D/g, '').slice(0, 4);
+            if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+            cardExpiryInput.value = v;
+        });
+
+        function showPayMsg(text, type) {
+            const msg = document.getElementById('payMsg');
+            msg.textContent = text;
+            msg.className = 'pay-msg show ' + (type || 'error');
+        }
+
+        document.getElementById('payNowBtn').addEventListener('click', () => {
+            const method = document.querySelector('input[name="payMethod"]:checked').value;
+            let error = '';
+
+            if (method === 'card') {
+                const name = document.getElementById('cardName').value.trim();
+                const num = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                const exp = document.getElementById('cardExpiry').value.trim();
+                const cvv = document.getElementById('cardCvv').value.trim();
+                if (!name) error = 'Please enter the name on the card.';
+                else if (!/^\d{13,19}$/.test(num)) error = 'Please enter a valid card number.';
+                else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(exp)) error = 'Expiry must be in MM/YY format.';
+                else if (!/^\d{3,4}$/.test(cvv)) error = 'Please enter a valid CVV.';
+            } else if (method === 'upi') {
+                const v = document.getElementById('upiId').value.trim();
+                if (!/^[\w.\-]{2,}@[A-Za-z]{2,}$/.test(v)) error = 'Please enter a valid UPI ID (e.g. name@bank).';
+            } else {
+                const v = document.getElementById('paypalEmail').value.trim();
+                if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) error = 'Please enter a valid PayPal email.';
+            }
+
+            if (error) { showPayMsg(error, 'error'); return; }
+
+            const payBtn = document.getElementById('payNowBtn');
+            payBtn.disabled = true;
+            showPayMsg('Processing payment, please wait...', 'success');
+
+            setTimeout(() => {
+                const ref = 'GV-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+                showPayMsg('Payment successful! Booking ref: ' + ref, 'success');
+
+                setTimeout(() => {
+                    closePayment();
+                    if (currentBooking) {
+                        successRoom.textContent = currentBooking.room;
+                        successAmount.textContent = '$' + currentBooking.total;
+                        successRef.textContent = ref;
+                    }
+                    bookingSuccess.style.display = 'block';
+                    bookingSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    bookingForm.reset();
+                    resetPayment();
+                }, 2500);
+            }, 1400);
+        });
+
+        // ---------- Esc closes modals ----------
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (authModal.classList.contains('show')) closeAuth();
+                if (paymentModal.classList.contains('show')) closePayment();
+            }
+        });
+        // ========== PAY NOW (RAZORPAY) - SEPARATE NEW FEATURE ==========
+        // Real payment gateway integration (Razorpay Standard Checkout).
+        // The order is created on the server (rzp-create-order.php) so orders can be
+        // captured and settled. Card details, CVV and UPI PIN are handled ONLY
+        // inside Razorpay's secure hosted checkout dialog — never on this page.
+        const QUICK_PAY = {
+            name: 'Grand Vista Hotel',
+            currency: 'INR',
+            contact: '7888233096',
+            email: 'reservations@grandvista.com',
+            createOrderUrl: 'rzp-create-order.php' // server endpoint that creates the Razorpay order
+        };
+
+        const quickPayBtn = document.getElementById('quickPayBtn');
+        const quickPayMsg = document.getElementById('quickPayMsg');
+        const quickPayAmount = document.getElementById('quickPayAmount');
+        const quickPayAmountLabel = document.getElementById('quickPayAmountLabel');
+
+        const METHOD_LABELS = { upi: 'UPI', card: 'Credit/Debit Card', netbanking: 'Net Banking' };
+
+        function showQuickPayMsg(text, type) {
+            quickPayMsg.textContent = text;
+            quickPayMsg.className = 'pay-msg show ' + (type || 'error');
+        }
+        function clearQuickPayMsg() {
+            quickPayMsg.textContent = '';
+            quickPayMsg.className = 'pay-msg';
+        }
+        function formatINR(n) {
+            return n.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+
+        quickPayAmount.addEventListener('input', () => {
+            const v = parseFloat(quickPayAmount.value);
+            quickPayAmountLabel.textContent = (v > 0 && isFinite(v)) ? formatINR(v) : '0';
+        });
+
+        quickPayBtn.addEventListener('click', async () => {
+            clearQuickPayMsg();
+
+            const raw = quickPayAmount.value.trim();
+            const amount = parseFloat(raw);
+            if (!raw || isNaN(amount) || amount <= 0 || !/^\d+(\.\d{1,2})?$/.test(raw)) {
+                showQuickPayMsg('Please enter a valid amount greater than ₹0 (e.g. 5000).', 'error');
+                return;
+            }
+
+            const methodEl = document.querySelector('input[name="quickPayMethod"]:checked');
+            const method = methodEl ? methodEl.value : 'upi';
+
+            if (!window.Razorpay) {
+                showQuickPayMsg('Razorpay SDK could not load. Check your internet connection and try again.', 'error');
+                return;
+            }
+
+            const originalLabel = quickPayBtn.textContent;
+            quickPayBtn.disabled = true;
+            quickPayBtn.textContent = 'Creating secure order…';
+            showQuickPayMsg('Contacting the payment gateway…', 'success');
+
+            try {
+                const res = await fetch(QUICK_PAY.createOrderUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: amount, currency: QUICK_PAY.currency, method: method })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.order_id) {
+                    const detail = data && data.error ? data.error : 'Payment server unreachable.';
+                    throw new Error(detail);
+                }
+
+                clearQuickPayMsg();
+                const session = getSession();
+                const options = {
+                    key: data.key_id,
+                    amount: Math.round(amount * 100), // paise
+                    currency: QUICK_PAY.currency,
+                    name: QUICK_PAY.name,
+                    description: 'Hotel payment ₹' + formatINR(amount) + ' via ' + (METHOD_LABELS[method] || method),
+                    order_id: data.order_id,
+                    prefill: {
+                        name: session && session.name ? session.name : '',
+                        email: session && session.email ? session.email : QUICK_PAY.email,
+                        contact: QUICK_PAY.contact
+                    },
+                    notes: { purpose: 'Grand Vista Hotel payment', payment_method: method },
+                    theme: { color: '#c9a962' },
+                    handler: function (response) {
+                        showQuickPayMsg(
+                            '✅ Payment successful! Payment ID: ' + response.razorpay_payment_id +
+                            ' · Amount ₹' + formatINR(amount) + '. Please note this ID for reference.',
+                            'success'
+                        );
+                        quickPayBtn.disabled = false;
+                        quickPayBtn.textContent = originalLabel;
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            quickPayBtn.disabled = false;
+                            quickPayBtn.textContent = originalLabel;
+                            showQuickPayMsg('Payment window closed. No charge was made.', 'error');
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (resp) {
+                    const e = resp.error || {};
+                    showQuickPayMsg(
+                        'Payment failed' + (e.description ? ': ' + e.description : '. Please try again.'),
+                        'error'
+                    );
+                    quickPayBtn.disabled = false;
+                    quickPayBtn.textContent = originalLabel;
+                });
+
+                quickPayBtn.textContent = originalLabel;
+                showQuickPayMsg('Opening secure Razorpay checkout…', 'success');
+                rzp.open();
+            } catch (err) {
+                quickPayBtn.disabled = false;
+                quickPayBtn.textContent = originalLabel;
+                const netMsg = 'Could not reach the payment server ("' + QUICK_PAY.createOrderUrl +
+                    '"). Host the page on a PHP server with the included rzp-create-order.php file, set your Razorpay keys in it, then try again.';
+                showQuickPayMsg(
+                    err && err.name === 'TypeError' ? netMsg : (err && err.message ? err.message + ' See setup notes in rzp-create-order.php.' : netMsg),
+                    'error'
+                );
+            }
+        });
+
+        // ========== FOOTER YEAR ==========
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Grand Vista Hotel</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(18, 18, 18, 0.65), rgba(18, 18, 18, 0.65)),
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat fixed;
+            min-height: 100vh;
+        }
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 60px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 18px;
+            box-shadow: 0 22px 60px rgba(0,0,0,0.28);
+            padding: 36px 30px;
+        }
+        .auth-card h1 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .auth-card p {
+            text-align: center;
+            margin-bottom: 26px;
+            color: var(--text);
+        }
+        .auth-card .form-group {
+            margin-bottom: 16px;
+        }
+        .auth-card input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: var(--light);
+            font-size: 0.98rem;
+            outline: none;
+        }
+        .auth-card input:focus {
+            border-color: var(--gold);
+        }
+        .auth-card button {
+            width: 100%;
+            border: none;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .auth-card button:hover {
+            background: var(--gold-dark);
+            color: white;
+        }
+        .auth-links {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 0.92rem;
+            color: var(--text);
+        }
+        .auth-links a {
+            color: var(--gold-dark);
+            font-weight: 700;
+        }
+        .auth-message {
+            margin-top: 16px;
+            display: none;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .auth-message.show { display: block; }
+        .auth-message.error { background: #fdecea; color: #b03a2e; border-left: 4px solid #e74c3c; }
+        .auth-message.success { background: #e8f7ee; color: #1f7a45; border-left: 4px solid #27ae60; }
+        .nav-auth-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .nav-auth-link {
+            color: var(--gold) !important;
+            font-weight: 700;
+        }
+        .nav-auth-link-alt {
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 7px 14px;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <span class="crown">◆</span> GRAND <span>VISTA</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" class="nav-auth-link">Login</a></li>
+                <li><a href="signup.html" class="nav-cta">Sign Up</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-card">
+            <h1>Login</h1>
+            <p>Welcome back to Grand Vista Hotel</p>
+
+            <form id="loginPageForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit">Log In</button>
+            </form>
+
+            <div class="auth-message" id="loginPageMsg"></div>
+
+            <div class="auth-links">
+                Don’t have an account? <a href="signup.html">Create one</a><br>
+                <a href="index.html?guest=1" onclick="sessionStorage.setItem('gv_continue_guest', '1')">Continue as Guest</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        const loginPageForm = document.getElementById('loginPageForm');
+        const loginPageMsg = document.getElementById('loginPageMsg');
+
+        if (localStorage.getItem('gv_session')) {
+            window.location.replace('index.html');
+        }
+
+        loginPageForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const users = JSON.parse(localStorage.getItem('gv_users') || '[]');
+            const match = users.find(user => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
+
+            if (!match) {
+                loginPageMsg.className = 'auth-message error show';
+                loginPageMsg.textContent = 'Invalid email or password. Try the demo account: test@grandvista.com / password123';
+                return;
+            }
+
+            localStorage.setItem('gv_session', JSON.stringify({ name: match.name, email: match.email }));
+            loginPageMsg.className = 'auth-message success show';
+            loginPageMsg.textContent = 'Login successful! Redirecting to the home page...';
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 900);
+        });
+    </script>
+</body>
+</html>
